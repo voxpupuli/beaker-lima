@@ -1,0 +1,25 @@
+---
+HOSTS:
+  ubuntu2204:
+    platform: ubuntu-2204-aarch64
+    roles:
+      - agent
+    hypervisor: lima
+    lima:
+      url: template://ubuntu-lts
+  oraclelinux8:
+    platform: el-8-aarch64
+    roles:
+      - master
+      - agent
+      - dashboard
+      - database
+      - classifier
+      - default
+    hypervisor: lima
+    lima:
+      url: template://oraclelinux-8
+CONFIG:
+  nfs_server: none
+  consoleport: 443
+  log_level: verbose

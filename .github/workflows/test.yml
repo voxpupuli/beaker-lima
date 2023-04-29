@@ -1,0 +1,58 @@
+name: Test
+
+on:
+  pull_request: {}
+  push:
+    branches:
+      - master
+
+env:
+  BUNDLE_WITHOUT: release
+
+jobs:
+  rubocop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Ruby 3.2
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+      - name: Run Rubocop
+        run: bundle exec rake rubocop
+
+  rspec:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ruby: "2.7"
+          - ruby: "3.0"
+            coverage: "yes"
+          - ruby: "3.1"
+          - ruby: "3.2"
+    env:
+      COVERAGE: ${{ matrix.coverage }}
+    name: RSpec - Ruby ${{ matrix.ruby }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Ruby ${{ matrix.ruby }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: spec tests
+        run: bundle exec rake test:spec
+      - name: Build gem
+        run: gem build *.gemspec
+
+  tests:
+    needs:
+      - rubocop
+      - rspec
+    runs-on: ubuntu-latest
+    name: Test suite
+    steps:
+      - run: echo Test suite completed

@@ -13,14 +13,12 @@ module Beaker
     end
     let(:lima_success) do
       rc = instance_double(Process::Status)
-      allow(rc).to receive(:success?).and_return(true)
-      allow(rc).to receive(:exitstatus).and_return(0)
+      allow(rc).to receive_messages(success?: true, exitstatus: 0)
       rc
     end
     let(:lima_failure) do
       rc = instance_double(Process::Status)
-      allow(rc).to receive(:success?).and_return(false)
-      allow(rc).to receive(:exitstatus).and_return(123)
+      allow(rc).to receive_messages(success?: false, exitstatus: 123)
       rc
     end
     let(:lima_result) { lima_success }

@@ -21,6 +21,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'voxpupuli-rubocop', '~> 3.0'
 
-  s.add_runtime_dependency 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
-  s.add_runtime_dependency 'beaker', '>= 5', '< 7'
+  s.add_dependency 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
+  s.add_dependency 'beaker', '>= 5', '< 7'
 end

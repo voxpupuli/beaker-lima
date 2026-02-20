@@ -57,7 +57,7 @@ module Beaker
     def start(vm_name, cfg = {})
       case status(vm_name)
       when ''
-        return create(vm_name, cfg)
+        create(vm_name, cfg)
       when 'Running'
         @logger.debug("'#{vm_name}' is running already, skipping...")
         return true
@@ -82,9 +82,10 @@ module Beaker
         # Write config to a temporary YAML file and pass it to limactl later
         safe_name = Shellwords.escape(vm_name)
         tmpfile = Tempfile.new(["lima_#{safe_name}", '.yaml'])
+        vm_preset = { "cpus" => 2, "memory" => "2GiB", "disk" => "20GiB" }.merge(cfg[:config] || {})
         # config has symbolized keys by default. So .to_yaml will write keys as :symbols.
         # Keys should be stringified to avoid this so Lima can parse the YAML properly.
-        tmpfile.write(stringify_keys_recursively(cfg[:config]).to_yaml)
+        tmpfile.write(stringify_keys_recursively(vm_preset).to_yaml)
         tmpfile.close
 
         # Validate the config
@@ -96,7 +97,7 @@ module Beaker
         raise LimaError, 'At least one of url/template/config parameters must be specified'
       end
 
-      lima_cmd = [@limactl, 'start', "--name=#{vm_name}", "--timeout=#{@timeout}s", cfg_url]
+      lima_cmd = [@limactl, 'create', "--name=#{vm_name}", cfg_url]
       _, stderr_str, status = Open3.capture3(*lima_cmd)
       tmpfile&.unlink # Delete tmpfile if any
 

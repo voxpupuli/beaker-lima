@@ -48,7 +48,13 @@ module Beaker
       lima_cmd = [@limactl, 'list', '--format', '{{ .Status }}', vm_name]
       stdout_str, stderr_str, status = Open3.capture3(*lima_cmd)
       unless status.success?
-        raise LimaError, "`#{lima_cmd.join(' ')}` failed with status #{status.exitstatus}: #{stderr_str}"
+        case status.exitstatus
+        when 1
+          # VM not found, continue without raising
+          @logger.debug("VM '#{vm_name}' not found when checking status")
+        else
+          raise LimaError, "`#{lima_cmd.join(' ')}` failed with status #{status.exitstatus}: #{stderr_str}"
+        end
       end
 
       stdout_str.chomp
@@ -82,7 +88,7 @@ module Beaker
         # Write config to a temporary YAML file and pass it to limactl later
         safe_name = Shellwords.escape(vm_name)
         tmpfile = Tempfile.new(["lima_#{safe_name}", '.yaml'])
-        vm_preset = { "cpus" => 2, "memory" => "2GiB", "disk" => "20GiB" }.merge(cfg[:config] || {})
+        vm_preset = { 'cpus' => 2, 'memory' => '2GiB', 'disk' => '20GiB' }.merge(cfg[:config] || {})
         # config has symbolized keys by default. So .to_yaml will write keys as :symbols.
         # Keys should be stringified to avoid this so Lima can parse the YAML properly.
         tmpfile.write(stringify_keys_recursively(vm_preset).to_yaml)

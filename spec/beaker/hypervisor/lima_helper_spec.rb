@@ -94,10 +94,15 @@ module Beaker
         it 'creates the VM' do
           allow(lima_helper).to receive(:status).and_return(vm_status)
           allow(lima_helper).to receive(:create).with(vm_name, {}).and_return(true)
+          allow(Open3).to receive(:capture3).with('limactl', 'start', "--timeout=#{options[:timeout]}s", vm_name)
+                                            .and_return([vm_status, '', lima_success])
 
           result = lima_helper.start(vm_name)
           expect(lima_helper).to have_received(:status).once
           expect(lima_helper).to have_received(:create).with(vm_name, {}).once
+          expect(Open3).to have_received(:capture3)
+            .with('limactl', 'start', "--timeout=#{options[:timeout]}s", vm_name)
+            .once
           expect(result).to be true
         end
       end
@@ -109,12 +114,12 @@ module Beaker
 
         it 'creates the VM' do
           allow(Open3).to receive(:capture3)
-            .with('limactl', 'start', "--name=#{vm_name}", "--timeout=#{options[:timeout]}s", cfg[:url])
+            .with('limactl', 'create', "--name=#{vm_name}", cfg[:url])
             .and_return(['', '', lima_success])
 
           result = lima_helper.create(vm_name, cfg)
           expect(Open3).to have_received(:capture3)
-            .with('limactl', 'start', "--name=#{vm_name}", "--timeout=#{options[:timeout]}s", cfg[:url])
+            .with('limactl', 'create', "--name=#{vm_name}", cfg[:url])
             .once
           expect(result).to be true
         end
@@ -138,13 +143,13 @@ module Beaker
           allow(Open3).to receive(:capture3).with('limactl', 'validate', saved_path)
                                             .and_return(['', '', lima_success])
           allow(Open3).to receive(:capture3)
-            .with('limactl', 'start', "--name=#{vm_name}", "--timeout=#{options[:timeout]}s", saved_path)
+            .with('limactl', 'create', "--name=#{vm_name}", saved_path)
             .and_return(['', '', lima_success])
 
           result = lima_helper.create(vm_name, cfg)
           expect(Open3).to have_received(:capture3).with('limactl', 'validate', saved_path).once
           expect(Open3).to have_received(:capture3)
-            .with('limactl', 'start', "--name=#{vm_name}", "--timeout=#{options[:timeout]}s", saved_path)
+            .with('limactl', 'create', "--name=#{vm_name}", saved_path)
             .once
           expect(result).to be true
         end

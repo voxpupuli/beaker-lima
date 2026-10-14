@@ -15,21 +15,8 @@ module Beaker
       @logger = options[:logger]
 
       @limactl = @options[:limactl] || 'limactl'
-      @lima_info = nil
       @ssh_info = {}
-      @timeout = @options[:timeout] || 600 # 10m
-    end
-
-    def info
-      return @lima_info if @lima_info
-
-      lima_cmd = [@limactl, 'info']
-      stdout_str, stderr_str, status = Open3.capture3(*lima_cmd)
-      unless status.success?
-        raise LimaError, "`#{lima_cmd.join(' ')}` failed with status #{status.exitstatus}: #{stderr_str}"
-      end
-
-      @lima_info = JSON.parse(stdout_str)
+      @timeout = @options[:timeout] || (60 * 10)
     end
 
     def list(vm_names = [])
@@ -46,12 +33,17 @@ module Beaker
     # A bit faster `list` variant to check the VM status
     def status(vm_name)
       lima_cmd = [@limactl, 'list', '--format', '{{ .Status }}', vm_name]
+      @logger.debug "running command #{lima_cmd.join(' ')}"
       stdout_str, stderr_str, status = Open3.capture3(*lima_cmd)
-      unless status.success?
+      @logger.debug "stdout: #{stdout_str}, stderr: #{stderr_str}, status: #{status}"
+
+      if status.success?
+        stdout_str.chomp
+      elsif stderr_str.include?('No instance matching')
+        ''
+      else
         raise LimaError, "`#{lima_cmd.join(' ')}` failed with status #{status.exitstatus}: #{stderr_str}"
       end
-
-      stdout_str.chomp
     end
 
     def start(vm_name, cfg = {})

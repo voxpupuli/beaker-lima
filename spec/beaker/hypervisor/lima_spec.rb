@@ -70,7 +70,6 @@ module Beaker
 
     let(:lima_helper) do
       lh = instance_double(LimaHelper)
-      allow(lh).to receive(:info).and_return({ 'version' => '1.2.3' })
       hosts.each do |host|
         # [list, status] are missing here because they depedns on a test case
         allow(lh).to receive(:start).with(host.name, host[:lima]).and_return(host.name)

@@ -26,19 +26,6 @@ module Beaker
     let(:vm_status) { '' }
     let(:lima_helper) { described_class.new(options) }
 
-    describe '#info' do
-      let(:limactl_info) { { 'version' => '1.2.3' } }
-
-      it 'returns `limactl info` output' do
-        allow(Open3).to receive(:capture3).with('limactl', 'info')
-                                          .and_return([limactl_info.to_json, '', lima_success])
-
-        result = lima_helper.info
-        expect(Open3).to have_received(:capture3).with('limactl', 'info').once
-        expect(result).to eq(limactl_info)
-      end
-    end
-
     describe '#list' do
       let(:limactl_list) do
         [

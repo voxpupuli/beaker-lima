@@ -41,7 +41,6 @@ module Beaker
         else
           puts "this is an unintended edge case where the VM state was unanticipated. Please run #{lima_cmd.join(' ')} and compare its output against the cases handled in source code"
           nil
-        4
       end
     end
 

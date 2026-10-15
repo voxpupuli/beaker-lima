@@ -20,16 +20,28 @@ module Beaker
       @timeout = @options[:timeout] || 600 # 10m
     end
 
+    def dbg *msg
+      puts "Debug: #{msg.join(' ')}"
+    end
+
     def info
+      dbg "Entering info"
       return @lima_info if @lima_info
 
       lima_cmd = [@limactl, 'info']
       stdout_str, stderr_str, status = Open3.capture3(*lima_cmd)
-      unless status.success?
-        raise LimaError, "`#{lima_cmd.join(' ')}` failed with status #{status.exitstatus}: #{stderr_str}"
+      dbg "stdout", stdout_str, "stderr", stderr_str, "status", status
+      case
+        when stderr_str =~ 'No instance matching'
+          @lima_info = JSON.parse("{}")
+        when stdout_str
+          @lima_info = JSON.parse(stdout_str)
+        when ! status.success?
+          raise LimaError, "`#{lima_cmd.join(' ')}` failed with status #{status.exitstatus}: #{stderr_str}"
+        else
+          puts "this is an unintended edge case where the VM state was unanticipated. Please run #{lima_cmd.join(' ')} and compare its output against the cases handled in source code"
+          nil
       end
-
-      @lima_info = JSON.parse(stdout_str)
     end
 
     def list(vm_names = [])

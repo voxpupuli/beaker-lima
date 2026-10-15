@@ -57,10 +57,12 @@ module Beaker
 
     # A bit faster `list` variant to check the VM status
     def status(vm_name)
+      dbg "in function status"
       lima_cmd = [@limactl, 'list', '--format', '{{ .Status }}', vm_name]
       stdout_str, stderr_str, status = Open3.capture3(*lima_cmd)
+      dbg "stdout", stdout_str, "stderr", stderr_str, "status", status
       unless status.success?
-        raise LimaError, "`#{lima_cmd.join(' ')}` failed with status #{status.exitstatus}: #{stderr_str}"
+        puts "VM does not exist"
       end
 
       stdout_str.chomp

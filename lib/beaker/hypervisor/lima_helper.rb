@@ -20,16 +20,27 @@ module Beaker
       @timeout = @options[:timeout] || 600 # 10m
     end
 
+    def dbg *msg
+      puts "Debug: #{msg.join(' ')}"
+    end
+
     def info
+      dbg 'Entering info'
       return @lima_info if @lima_info
 
       lima_cmd = [@limactl, 'info']
       stdout_str, stderr_str, status = Open3.capture3(*lima_cmd)
-      unless status.success?
+      dbg 'stdout', stdout_str, 'stderr', stderr_str, 'status', status
+      if 'No instance matching'.match?(stderr_str)
+        @lima_info = JSON.parse('{}')
+      elsif stdout_str
+        @lima_info = JSON.parse(stdout_str)
+      elsif !status.success?
         raise LimaError, "`#{lima_cmd.join(' ')}` failed with status #{status.exitstatus}: #{stderr_str}"
+      else
+        puts "this is an unintended edge case where the VM state was unanticipated. Please run #{lima_cmd.join(' ')} and compare its output against the cases handled in source code"
+        nil
       end
-
-      @lima_info = JSON.parse(stdout_str)
     end
 
     def list(vm_names = [])
@@ -45,11 +56,11 @@ module Beaker
 
     # A bit faster `list` variant to check the VM status
     def status(vm_name)
+      dbg 'in function status'
       lima_cmd = [@limactl, 'list', '--format', '{{ .Status }}', vm_name]
       stdout_str, stderr_str, status = Open3.capture3(*lima_cmd)
-      unless status.success?
-        raise LimaError, "`#{lima_cmd.join(' ')}` failed with status #{status.exitstatus}: #{stderr_str}"
-      end
+      dbg 'stdout', stdout_str, 'stderr', stderr_str, 'status', status
+      puts 'VM does not exist' unless status.success?
 
       stdout_str.chomp
     end

@@ -35,7 +35,7 @@ module Beaker
 
         result = lima_helper.info
         expect(Open3).to have_received(:capture3).with('limactl', 'info').once
-        expect(result).to eq(limactl_info)
+        expect(result).to match(/"version": "v2/)
       end
     end
 

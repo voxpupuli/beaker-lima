@@ -4,6 +4,8 @@ source ENV['GEM_SOURCE'] || 'https://rubygems.org'
 
 gemspec
 
+gem 'irb' # implicit dependency beaker->fakefs->irb
+
 group :coverage, optional: ENV['COVERAGE'] != 'yes' do
   gem 'codecov', require: false
   gem 'simplecov-console', require: false

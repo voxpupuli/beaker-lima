@@ -27,7 +27,7 @@ module Beaker
       lima_cmd = [@limactl, 'info']
       stdout_str, stderr_str, status = Open3.capture3(*lima_cmd)
       @logger.debug "stdout: #{stdout_str}, stderr, #{stderr_str}, status #{status}"
-      if 'No instance matching'.match?(stderr_str)
+      if stderr_str.include? 'No instance matching'
         @lima_info = JSON.parse('{}')
       elsif stdout_str
         @lima_info = JSON.parse(stdout_str)

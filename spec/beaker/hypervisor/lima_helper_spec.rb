@@ -27,7 +27,7 @@ module Beaker
     let(:lima_helper) { described_class.new(options) }
 
     describe '#info' do
-      let(:limactl_info) { { 'version' => '1.2.3' } }
+      let(:limactl_info) { { 'version' => '2.3.0-beta.0' } }
 
       it 'returns `limactl info` output' do
         allow(Open3).to receive(:capture3).with('limactl', 'info')
@@ -35,7 +35,7 @@ module Beaker
 
         result = lima_helper.info
         expect(Open3).to have_received(:capture3).with('limactl', 'info').once
-        expect(result).to match(/"version": "v2/)
+        expect(result['version']).to eq('2.3.0-beta.0')
       end
     end
 

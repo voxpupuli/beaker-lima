@@ -1,14 +1,14 @@
 ---
 HOSTS:
   ubuntu2204:
-    platform: ubuntu-2204-aarch64
+    platform: ubuntu-2204-64
     roles:
       - agent
     hypervisor: lima
     lima:
       url: template://ubuntu-lts
   oraclelinux8:
-    platform: el-8-aarch64
+    platform: el-8-x86_64
     roles:
       - master
       - agent

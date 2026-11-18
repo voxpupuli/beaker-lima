@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 3.0'
 
   s.add_development_dependency 'fakefs', '>= 1.3', '< 4.0'
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rake', '< 14'
+  s.add_development_dependency 'rspec', '< 4'
   s.add_development_dependency 'voxpupuli-rubocop', '~> 3.0'
 
   s.add_dependency 'bcrypt_pbkdf', '>= 1.0', '< 2.0'

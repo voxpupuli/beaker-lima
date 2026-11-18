@@ -5,6 +5,9 @@ inherit_from:
 inherit_gem:
   voxpupuli-rubocop: rubocop.yml
 
+AllCops:
+  TargetRubyVersion: 3.0
+
 Naming/FileName:
   Description: Some files violates the snake_case convention
   Exclude:

@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/voxpupuli/beaker-lima'
   s.license     = 'Apache-2.0'
 
-  s.required_ruby_version = '>= 2.7'
+  s.required_ruby_version = '>= 3.0'
 
   s.add_development_dependency 'fakefs', '>= 1.3', '< 3.0'
   s.add_development_dependency 'rake'

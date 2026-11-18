@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2](https://github.com/voxpupuli/beaker-lima/tree/1.0.2) (2026-11-18)
+
+[Full Changelog](https://github.com/voxpupuli/beaker-lima/compare/1.0.1...1.0.2)
+
+**Fixed bugs:**
+
+- CI: set correct owner for publishing [\#32](https://github.com/voxpupuli/beaker-lima/pull/32) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [1.0.1](https://github.com/voxpupuli/beaker-lima/tree/1.0.1) (2026-11-18)
 
 [Full Changelog](https://github.com/voxpupuli/beaker-lima/compare/1.0.0...1.0.1)

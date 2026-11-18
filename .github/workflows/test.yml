@@ -29,7 +29,7 @@ jobs:
 
   test:
     name: "Ruby ${{ matrix.ruby }}"
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     needs: rubocop_and_matrix
     strategy:
       fail-fast: false
@@ -55,7 +55,7 @@ jobs:
     needs:
       - rubocop_and_matrix
       - test
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Test suite
     steps:
       - name: Decide whether the needed jobs succeeded or failed

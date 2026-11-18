@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/voxpupuli/beaker-lima/tree/1.0.1) (2026-11-18)
+
+[Full Changelog](https://github.com/voxpupuli/beaker-lima/compare/1.0.0...1.0.1)
+
+**Fixed bugs:**
+
+- pin all external actions & CI: configure rubygems account [\#30](https://github.com/voxpupuli/beaker-lima/pull/30) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [1.0.0](https://github.com/voxpupuli/beaker-lima/tree/1.0.0) (2026-11-18)
 
 [Full Changelog](https://github.com/voxpupuli/beaker-lima/compare/e0d276db2f1c9ab22092b99a638cfb091984bc9f...1.0.0)

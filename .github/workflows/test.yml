@@ -35,9 +35,6 @@ jobs:
       fail-fast: false
       matrix:
         ruby: ${{ fromJSON(needs.rubocop_and_matrix.outputs.ruby) }}
-   env:
-      COVERAGE: ${{ matrix.coverage }}
-    name: RSpec - Ruby ${{ matrix.ruby }}
     steps:
       - uses: actions/checkout@v7
       - name: Install Ruby ${{ matrix.ruby }}
